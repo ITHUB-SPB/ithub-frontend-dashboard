@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AntDesignRouteImport } from './routes/ant-design'
+import { Route as RhfMantineRouteImport } from './routes/rhf-mantine'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AntDesignRoute = AntDesignRouteImport.update({
+  id: '/ant-design',
+  path: '/ant-design',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RhfMantineRoute = RhfMantineRouteImport.update({
+  id: '/rhf-mantine',
+  path: '/rhf-mantine',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ant-design': typeof AntDesignRoute
+  '/rhf-mantine': typeof RhfMantineRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ant-design': typeof AntDesignRoute
+  '/rhf-mantine': typeof RhfMantineRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ant-design': typeof AntDesignRoute
+  '/rhf-mantine': typeof RhfMantineRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/ant-design' | '/rhf-mantine'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/ant-design' | '/rhf-mantine'
+  id: '__root__' | '/' | '/ant-design' | '/rhf-mantine'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AntDesignRoute: typeof AntDesignRoute
+  RhfMantineRoute: typeof RhfMantineRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ant-design': {
+      id: '/ant-design'
+      path: '/ant-design'
+      fullPath: '/ant-design'
+      preLoaderRoute: typeof AntDesignRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rhf-mantine': {
+      id: '/rhf-mantine'
+      path: '/rhf-mantine'
+      fullPath: '/rhf-mantine'
+      preLoaderRoute: typeof RhfMantineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AntDesignRoute: AntDesignRoute,
+  RhfMantineRoute: RhfMantineRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

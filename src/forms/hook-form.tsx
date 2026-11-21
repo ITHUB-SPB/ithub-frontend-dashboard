@@ -1,39 +1,18 @@
+import * as z from 'zod'
+
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DevTool } from '@hookform/devtools'
 
 import { Stack, TextInput, NumberInput, Checkbox, Button, Group, Radio } from '@mantine/core';
 import { DatePicker } from '@mantine/dates'
-
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 
-import * as z from 'zod'
-
 import { useFormStore } from '#/store';
-import classes from '../mantine.module.css'
+import { createBookingSchema, createBookingStepFirstSchema, createBookingStepSecondSchema } from '#/schema';
+import classes from '../styles/mantine.module.css'
 
-const createBookingSchema = z.object({
-    phone: z.string('Заполните поле')
-        .nonempty('Поле не может быть пустым')
-        .regex(/^\+7\d{10}$/, { error: 'Используйте формат +7хххххххххх' }),
-    agreement: z.boolean().optional().default(true),
-    monthOfBirth: z.number('Месяц рождения').int().min(1).max(12),
-    yearOfBirth: z.number('Год рождения').int().min(1900).max(2026),
-    bookingDate: z.iso.date('Выберите день'),
-    bookingTime: z.iso.time('Выберите слот')
-})
-
-const createBookingStepFirstSchema = createBookingSchema.pick({
-    phone: true,
-    monthOfBirth: true,
-    yearOfBirth: true
-})
-
-const createBookingStepSecondSchema = createBookingSchema.pick({
-    bookingDate: true,
-    bookingTime: true
-})
 
 const steps = [
     createBookingStepFirstSchema.keyof().options,

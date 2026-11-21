@@ -1,8 +1,8 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import { HeadContent, Scripts, createRootRoute, Link } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
-import appCss from '../styles.css?url'
+import appCss from '../styles/global.css?url'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -35,6 +35,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <nav>
+          <Link to="/rhf-mantine">Mantine + RHF</Link>
+          <Link to="/ant-design">AntD</Link>
+        </nav>
         {children}
         <TanStackDevtools
           config={{

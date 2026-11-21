@@ -7,7 +7,7 @@ import { Popover, Alert, Stack, MaskInput, TextInput, NumberInput, Checkbox, But
 import { DateInput } from '@mantine/dates'
 import { notifications } from '@mantine/notifications'
 
-import classes from '../mantine.module.css'
+import classes from '../styles/mantine.module.css'
 
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
