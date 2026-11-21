@@ -1,15 +1,24 @@
 import { useState } from 'react';
-import { Button, Table, Space, Popconfirm, Checkbox, Radio, DatePicker, Form, Input, InputNumber } from 'antd'
+import { Button, Table, Space, Popconfirm, Checkbox, Radio, DatePicker, Form, Input, InputNumber, type TableColumnsType } from 'antd'
 import { CheckCircleTwoTone, EditTwoTone, DeleteTwoTone, CloseCircleTwoTone } from '@ant-design/icons'
 import type { NotificationInstance } from 'antd/es/notification/interface';
 
 // import classes from '../styles/mantine.module.css'
 
-const data = [
-    { phone: '+79990001111', birthDate: '2022-12-05', bookingDate: '2026-11-13', bookingTime: '10:15' },
-    { phone: '+79990001112', birthDate: '2024-02-05', bookingDate: '2026-11-14', bookingTime: '12:25' },
-    { phone: '+79990001113', birthDate: '2000-07-08', bookingDate: '2026-11-14', bookingTime: '12:35' }
-]
+type Row = {
+    phone: string;
+    birthDate: string;
+    bookingDate: string;
+    bookingTime: string;
+    paymentType: string;
+    key: string;
+}
+
+const data: Row[] = [
+    { phone: '+79990001111', birthDate: '2022-12-05', bookingDate: '2026-11-13', bookingTime: '2025-11-13T10:15:00.0000Z', paymentType: 'cash' },
+    { phone: '+79990001112', birthDate: '2024-02-05', bookingDate: '2026-11-14', bookingTime: '2026-05-05T06:20:13.0000Z', paymentType: 'cash' },
+    { phone: '+79990001113', birthDate: '2000-07-08', bookingDate: '2026-11-14', bookingTime: '2026-08-10T14:00:28.0000Z', paymentType: 'card' }
+].map((item, ix) => ({ ...item, key: String(ix) }))
 
 type ActionBarProps = {
     notificationApi: NotificationInstance;
@@ -43,37 +52,62 @@ function ActionBar({ isEditing, onEditClick, notificationApi }: ActionBarProps) 
 }
 
 export default function AntdTable({ notificationApi }: { notificationApi: NotificationInstance }) {
-    const [tableData, setTableData] = useState(data)
-    const [editRowId, setEditRowId] = useState<null | number>(null)
+    const [editRowId, setEditRowId] = useState<null | string>(null)
+
+    const columns: TableColumnsType<Row> = [
+        {
+            title: "Phone",
+            dataIndex: 'phone',
+            key: 'phone',
+            sorter: (a, b) => a.phone > b.phone ? 1 : -1,
+            defaultSortOrder: 'ascend'
+        },
+        {
+            title: "Birth Date",
+            dataIndex: 'birthDate',
+            key: 'birthDate',
+            sorter: (a, b) => new Date(a.birthDate) > new Date(b.birthDate) ? 1 : -1,
+            render: (value: string) => new Date(value).toLocaleDateString('ru')
+        },
+        { title: "Booking Date", dataIndex: 'bookingDate', key: 'bookingDate' },
+        {
+            title: "Booking Time",
+            dataIndex: 'bookingTime',
+            key: 'bookingTime',
+            render: (value: string) => new Date(value).toLocaleTimeString('ru')
+        },
+        {
+            title: "Payment Type",
+            dataIndex: 'paymentType',
+            key: 'paymentType',
+            filters: [
+                {
+                    text: 'Card',
+                    value: 'card'
+                },
+                {
+                    text: 'Cash',
+                    value: 'cash'
+                }
+            ],
+            onFilter: (value, record) => value === record.paymentType,
+            defaultFilteredValue: ['card', 'cash']
+        },
+        {
+            title: "",
+            dataIndex: '',
+            key: 'actions',
+            render: (_, row) => <ActionBar notificationApi={notificationApi} isEditing={editRowId === row.key} onEditClick={() => setEditRowId(row.key)} />
+        },
+    ]
 
     return (
-        <Table
-            dataSource={data.map((item, ix) => ({ ...item, key: String(ix) }))}
-            columns={[
-                { title: "Phone", dataIndex: 'phone', key: 'phone' },
-                { title: "Birth Date", dataIndex: 'birthDate', key: 'birthDate' },
-                { title: "Booking Date", dataIndex: 'bookingDate', key: 'bookingDate' },
-                { title: "Booking Time", dataIndex: 'bookingTime', key: 'bookingTime' },
-                { title: "", dataIndex: '', key: 'actions' },
-            ]}
+        <Table<Row>
+            dataSource={data}
+            columns={columns}
             pagination={{
                 hideOnSinglePage: true
             }}
-
-        // data={{
-        //     head: ['Phone', 'Birth Date', 'Booking Date', 'Booking Time', ''],
-        //     body: tableData.map((item, ix) => [
-        //         <MaskInput
-        //             classNames={{ input: classes.cell }}
-        //             mask="\+7 (999) 999-99-99"
-        //             value={item[0]}
-        //             readOnly={editRowId !== ix}
-        //         />,
-        //         <DateInput value={item[1]} classNames={{ input: classes.cell }} readOnly={editRowId !== ix} />,
-
-        //         <ActionBar isEditing={editRowId === ix} onEditClick={() => setEditRowId(ix)} />
-        //     ])
-        // }} 
         />
     )
 }
