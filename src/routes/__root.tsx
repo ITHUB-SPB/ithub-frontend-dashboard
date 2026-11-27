@@ -38,6 +38,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <nav>
           <Link to="/rhf-mantine">Mantine + RHF</Link>
           <Link to="/ant-design">AntD</Link>
+          <Link to="/tanstack-shadcn">Tanstack + Shadcn</Link>
         </nav>
         {children}
         <TanStackDevtools

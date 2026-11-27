@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AntDesignRouteImport } from './routes/ant-design'
 import { Route as RhfMantineRouteImport } from './routes/rhf-mantine'
+import { Route as TanstackShadcnRouteImport } from './routes/tanstack-shadcn'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,44 @@ const RhfMantineRoute = RhfMantineRouteImport.update({
   path: '/rhf-mantine',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TanstackShadcnRoute = TanstackShadcnRouteImport.update({
+  id: '/tanstack-shadcn',
+  path: '/tanstack-shadcn',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ant-design': typeof AntDesignRoute
   '/rhf-mantine': typeof RhfMantineRoute
+  '/tanstack-shadcn': typeof TanstackShadcnRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ant-design': typeof AntDesignRoute
   '/rhf-mantine': typeof RhfMantineRoute
+  '/tanstack-shadcn': typeof TanstackShadcnRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/ant-design': typeof AntDesignRoute
   '/rhf-mantine': typeof RhfMantineRoute
+  '/tanstack-shadcn': typeof TanstackShadcnRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ant-design' | '/rhf-mantine'
+  fullPaths: '/' | '/ant-design' | '/rhf-mantine' | '/tanstack-shadcn'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ant-design' | '/rhf-mantine'
-  id: '__root__' | '/' | '/ant-design' | '/rhf-mantine'
+  to: '/' | '/ant-design' | '/rhf-mantine' | '/tanstack-shadcn'
+  id: '__root__' | '/' | '/ant-design' | '/rhf-mantine' | '/tanstack-shadcn'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AntDesignRoute: typeof AntDesignRoute
   RhfMantineRoute: typeof RhfMantineRoute
+  TanstackShadcnRoute: typeof TanstackShadcnRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RhfMantineRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tanstack-shadcn': {
+      id: '/tanstack-shadcn'
+      path: '/tanstack-shadcn'
+      fullPath: '/tanstack-shadcn'
+      preLoaderRoute: typeof TanstackShadcnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AntDesignRoute: AntDesignRoute,
   RhfMantineRoute: RhfMantineRoute,
+  TanstackShadcnRoute: TanstackShadcnRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
